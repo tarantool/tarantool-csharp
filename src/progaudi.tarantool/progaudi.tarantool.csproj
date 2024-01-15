@@ -6,21 +6,12 @@
     <TargetFrameworks>netstandard2.0;net60</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
-    <PatchLevelVersion Condition=" '$(BuildNumber)' == '' ">0</PatchLevelVersion>
-    <PatchLevelVersion Condition=" '$(BuildNumber)' != '' ">$(BuildNumber).1-prerelease</PatchLevelVersion>
-    <Version>0.9.$(PatchLevelVersion)</Version>
-
     <Description>Tarantool low-level client Library</Description>
     <WarningsAsErrors>true</WarningsAsErrors>
-
-    <AssemblyName>progaudi.tarantool</AssemblyName>
-    <RootNamespace>ProGaudi.Tarantool.Client</RootNamespace>
-    <Product>progaudi.tarantool</Product>
-    <Copyright>Copyright © 2016-2023</Copyright>
-
-    <PackageTags>tarantool;csharp</PackageTags>
-    <PackageProjectUrl>https://github.com/progaudi/progaudi.tarantool</PackageProjectUrl>
-
+    
+    <Product>tarantool.dotnet</Product>
+    <PackageTags>tarantool;csharp;dotnet</PackageTags>
+    <PackageProjectUrl>https://github.com/tarantool/tarantool-csharp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
 

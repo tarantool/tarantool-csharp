@@ -1,6 +1,7 @@
 # progaudi.tarantool
 
 Dotnet client for Tarantool NoSql database.
+Fork from [progaudi.tarantool](https://www.nuget.org/packages/progaudi.tarantool).
 
 # Key features
  - Full [IProto](https://tarantool.org/doc/dev_guide/box-protocol.html) protocol coverage.
@@ -9,7 +10,7 @@ Dotnet client for Tarantool NoSql database.
 
 # Installation
 
-Simpliest way to start using ```progaudi.tarantool``` in your project is to install it from [Nuget](https://www.nuget.org/packages/progaudi.tarantool/).
+Simpliest way to start using ```tarantool-dotnet``` in your project is to install it from [Nuget](https://www.nuget.org/packages/Tarantool.DotNet/).
 
 # Demo
 
@@ -18,16 +19,6 @@ Simpliest way to start using ```progaudi.tarantool``` in your project is to inst
 # Usage
 
 You can find basic usage scenarios in [index](https://github.com/progaudi/progaudi.tarantool/blob/master/tests/progaudi.tarantool.tests/Index/Smoke.cs) and [space](https://github.com/progaudi/progaudi.tarantool/blob/master/tests/progaudi.tarantool.tests/Space/Smoke.cs) smoke tests.
-
-# Build statuses for master branch
-
-Windows build status:
-
-[![Windows build status](https://server-ci.evote.work/app/rest/builds/buildType:(id:Progaudi_Tarantool)/statusIcon)](https://server-ci.evote.work/viewType.html?buildTypeId=Progaudi_Tarantool)
-
-Linux and OSX build status:
-
-[![Linux/OSX build Status](https://travis-ci.org/progaudi/progaudi.tarantool.svg?branch=master)](https://travis-ci.org/progaudi/progaudi.tarantool)
 
 # Limitations
 

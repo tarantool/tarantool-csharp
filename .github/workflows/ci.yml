@@ -47,7 +47,7 @@ jobs:
       run: |
         set +x
         NUGET_VERSION=$(git describe --tags --abbrev=1 | sed 's/-/./')
-        dotnet pack -c Release --no-build -v minimal -o ${{ env.NuGetDirectory }} -p:PackageVersion=$NUGET_VERSION
+        dotnet pack -c Release --no-build -v minimal -o ${{ env.NuGetDirectory }} -p:PackageVersion=$NUGET_VERSION -p:PackageID=Tarantool.DotNet
     - name: Publish NuGet package
       if: success() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
       run: dotnet nuget push "${{ env.NuGetDirectory }}/*.nupkg" --api-key "${{ secrets.NUGET_PUSH }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
