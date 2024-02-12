@@ -1,4 +1,6 @@
-﻿namespace ProGaudi.Tarantool.Client.Model
+﻿using ProGaudi.Tarantool.Client.Core;
+
+namespace ProGaudi.Tarantool.Client.Model
 {
     public class Metrics
     {

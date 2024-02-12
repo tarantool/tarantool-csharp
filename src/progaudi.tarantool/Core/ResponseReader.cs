@@ -4,9 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 using JetBrains.Annotations;
-
 using ProGaudi.MsgPack.Light;
 using ProGaudi.Tarantool.Client.Model;
 using ProGaudi.Tarantool.Client.Model.Enums;
@@ -14,7 +12,7 @@ using ProGaudi.Tarantool.Client.Model.Headers;
 using ProGaudi.Tarantool.Client.Model.Responses;
 using ProGaudi.Tarantool.Client.Utils;
 
-namespace ProGaudi.Tarantool.Client
+namespace ProGaudi.Tarantool.Client.Core
 {
     internal class ResponseReader : IResponseReader
     {

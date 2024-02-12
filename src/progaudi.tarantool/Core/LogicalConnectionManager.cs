@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using ProGaudi.Tarantool.Client.Model;
 using ProGaudi.Tarantool.Client.Model.Requests;
 using ProGaudi.Tarantool.Client.Model.Responses;
 using ProGaudi.Tarantool.Client.Utils;
 
-namespace ProGaudi.Tarantool.Client
+namespace ProGaudi.Tarantool.Client.Core
 {
     public class LogicalConnectionManager : ILogicalConnection
     {
@@ -46,8 +45,10 @@ namespace ProGaudi.Tarantool.Client
 
             _pingTimeout = _clientOptions.ConnectionOptions.PingCheckTimeout;
         }
-
+        
         public uint PingsFailedByTimeoutCount => _droppableLogicalConnection?.PingsFailedByTimeoutCount ?? 0;
+
+        public event EventHandler<ConnectionWentDownEventArgs> ConnectionGoesDown;
 
         public void Dispose()
         {
@@ -84,6 +85,7 @@ namespace ProGaudi.Tarantool.Client
                 _clientOptions.LogWriter?.WriteLine($"{nameof(LogicalConnectionManager)}: Connecting...");
 
                 var newConnection = new LogicalConnection(_clientOptions, _requestIdCounter);
+                newConnection.ConnectionTimeoutThresholdReached += ConnectionTimeoutThresholdReached;
                 await newConnection.Connect().ConfigureAwait(false);;
                 Interlocked.Exchange(ref _droppableLogicalConnection, newConnection)?.Dispose();
 
@@ -100,6 +102,20 @@ namespace ProGaudi.Tarantool.Client
             {
                 _reconnectAvailable.Set();
             }
+        }
+
+        private void ConnectionTimeoutThresholdReached(object sender, ConnectionTimeoutThresholdReachedEventArgs e)
+        {
+            _clientOptions.LogWriter?.WriteLine($"{nameof(LogicalConnectionManager)}: Connection timeout threshold reached. Dropping current connection.");
+            var connection = (LogicalConnection)sender;
+            connection?.Dispose();
+            OnConnectionGoesDown(new ConnectionWentDownEventArgs(_clientOptions));
+        }
+        
+        protected virtual void OnConnectionGoesDown(ConnectionWentDownEventArgs e)
+        {
+            var handler = ConnectionGoesDown;
+            handler?.Invoke(this, e);
         }
 
         private static readonly PingRequest _pingRequest = new PingRequest();
@@ -119,6 +135,7 @@ namespace ProGaudi.Tarantool.Client
             {
                 _clientOptions.LogWriter?.WriteLine($"{nameof(LogicalConnectionManager)}: Ping failed with exception: {e.Message}. Dropping current connection.");
                 _droppableLogicalConnection?.Dispose();
+                OnConnectionGoesDown(new ConnectionWentDownEventArgs(_clientOptions));
             }
             finally
             {

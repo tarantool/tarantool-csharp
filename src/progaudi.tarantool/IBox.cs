@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ProGaudi.Tarantool.Client.Core;
 using ProGaudi.Tarantool.Client.Model;
+using ProGaudi.Tarantool.Client.Model.Requests;
 using ProGaudi.Tarantool.Client.Model.Responses;
 
 namespace ProGaudi.Tarantool.Client
@@ -47,5 +49,11 @@ namespace ProGaudi.Tarantool.Client
         Task<DataResponse<TResponse[]>> ExecuteSql<TResponse>(string query, params SqlParameter[] parameters);
 
         Task<DataResponse> ExecuteSql(string query, params SqlParameter[] parameters);
+
+        Task Do<TRequest>(TRequest request) where TRequest : IRequest;
+
+        Task<DataResponse<TResponse[]>> Do<TRequest, TResponse>(TRequest request) where TRequest : IRequest;
+        
+        event EventHandler<ConnectionWentDownEventArgs> ConnectionGoesDown;
     }
 }
