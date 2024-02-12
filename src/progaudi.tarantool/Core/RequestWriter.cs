@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using ProGaudi.Tarantool.Client.Model;
 
-namespace ProGaudi.Tarantool.Client
+namespace ProGaudi.Tarantool.Client.Core
 {
     internal class RequestWriter : IRequestWriter
     {

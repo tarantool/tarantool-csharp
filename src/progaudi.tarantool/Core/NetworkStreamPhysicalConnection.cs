@@ -3,15 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-
 using ProGaudi.Tarantool.Client.Model;
 using ProGaudi.Tarantool.Client.Utils;
-
 #if PROGAUDI_NETCORE
 using System.Net;
 #endif
 
-namespace ProGaudi.Tarantool.Client
+namespace ProGaudi.Tarantool.Client.Core
 {
     internal class NetworkStreamPhysicalConnection : IPhysicalConnection
     {

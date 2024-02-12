@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ProGaudi.Tarantool.Client.Core;
 using ProGaudi.Tarantool.Client.Model;
 using ProGaudi.Tarantool.Client.Model.Requests;
 using ProGaudi.Tarantool.Client.Model.Responses;
@@ -22,7 +24,10 @@ namespace ProGaudi.Tarantool.Client
             _clientOptions = options;
             TarantoolConvertersRegistrator.Register(options.MsgPackContext);
 
-            _logicalConnection = new LogicalConnectionManager(options);
+            var lcm = new LogicalConnectionManager(options);
+            lcm.ConnectionGoesDown += ConnectionWentDownHandler;
+            _logicalConnection = lcm;
+            
             Metrics = new Metrics(_logicalConnection);
             Schema = new Schema(_logicalConnection);
         }
@@ -42,6 +47,8 @@ namespace ProGaudi.Tarantool.Client
                 _sqlReady = value.IsSqlAvailable();
             }
         }
+        
+        public event EventHandler<ConnectionWentDownEventArgs> ConnectionGoesDown;
 
         public async Task Connect()
         {
@@ -162,6 +169,27 @@ namespace ProGaudi.Tarantool.Client
             if (!_sqlReady) throw ExceptionHelper.SqlIsNotAvailable(Info.Version);
 
             return _logicalConnection.SendRequest<ExecuteSqlRequest, TResponse>(new ExecuteSqlRequest(query, parameters));
+        }
+        
+        public Task Do<TRequest>(TRequest request) where TRequest : IRequest
+        {
+            return _logicalConnection.SendRequest(request);
+        }
+
+        public Task<DataResponse<TResponse[]>> Do<TRequest, TResponse>(TRequest request) where TRequest : IRequest
+        {
+            return _logicalConnection.SendRequest<TRequest, TResponse>(request);
+        }
+        
+        protected virtual void OnConnectionGoesDown(ConnectionWentDownEventArgs e)
+        {
+            var handler = ConnectionGoesDown;
+            handler?.Invoke(this, e);
+        }
+        
+        private void ConnectionWentDownHandler(object sender, ConnectionWentDownEventArgs e)
+        {
+            OnConnectionGoesDown(e);
         }
     }
 }

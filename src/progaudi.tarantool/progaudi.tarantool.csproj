@@ -37,6 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="progaudi.tarantool.tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="T4Templates\TarantoolTuples.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TarantoolTuples.cs</LastGenOutput>
@@ -82,10 +86,6 @@
       <DependentUpon>ValueTupleConverters.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
-    <DefineConstants>$(DefineConstants);PROGAUDI_NETCORE</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>

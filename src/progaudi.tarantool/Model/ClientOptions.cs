@@ -16,7 +16,7 @@ namespace ProGaudi.Tarantool.Client.Model
         {
         }
 
-        private ClientOptions(ConnectionOptions options, ILog log, MsgPackContext context)
+        public ClientOptions(ConnectionOptions options, ILog log, MsgPackContext context)
         {
             ConnectionOptions = options;
             MsgPackContext = context ?? new MsgPackContext(binaryCompatibilityMode: true);

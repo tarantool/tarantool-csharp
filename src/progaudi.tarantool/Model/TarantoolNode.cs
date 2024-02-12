@@ -9,7 +9,7 @@ namespace ProGaudi.Tarantool.Client.Model
         {
         }
 
-        private TarantoolNode([NotNull] string url)
+        public TarantoolNode([NotNull] string url)
         {
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentException("Value cannot be null or empty.", nameof(url));

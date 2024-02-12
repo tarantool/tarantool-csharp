@@ -11,9 +11,9 @@ namespace ProGaudi.Tarantool.Client.Model
 
         public long Pid { get; private set; }
 
-        public bool ReadOnly { get; private set; }
+        public virtual bool ReadOnly { get; private set; }
 
-        public Guid Uuid { get; private set; }
+        public virtual Guid Uuid { get; private set; }
 
         public TarantoolVersion Version { get; private set; }
 

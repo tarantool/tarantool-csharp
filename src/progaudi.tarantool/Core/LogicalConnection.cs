@@ -3,16 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using ProGaudi.MsgPack.Light;
-
 using ProGaudi.Tarantool.Client.Model;
 using ProGaudi.Tarantool.Client.Model.Headers;
 using ProGaudi.Tarantool.Client.Model.Requests;
 using ProGaudi.Tarantool.Client.Model.Responses;
 using ProGaudi.Tarantool.Client.Utils;
 
-namespace ProGaudi.Tarantool.Client
+namespace ProGaudi.Tarantool.Client.Core
 {
     internal class LogicalConnection : ILogicalConnection
     {
@@ -43,11 +41,7 @@ namespace ProGaudi.Tarantool.Client
             _requestWriter = new RequestWriter(_clientOptions, _physicalConnection);
         }
 
-        public uint PingsFailedByTimeoutCount
-        {
-            get;
-            private set;
-        }
+        public uint PingsFailedByTimeoutCount { get; private set; }
 
         public void Dispose()
         {
@@ -123,6 +117,13 @@ namespace ProGaudi.Tarantool.Client
         {
             return (await SendRequestImpl(request, timeout).ConfigureAwait(false)).ToArray();
         }
+        public event EventHandler<ConnectionTimeoutThresholdReachedEventArgs> ConnectionTimeoutThresholdReached;
+        
+        protected virtual void OnConnectionTimeoutThresholdReached(ConnectionTimeoutThresholdReachedEventArgs e)
+        {
+            var handler = ConnectionTimeoutThresholdReached;
+            handler?.Invoke(this, e);
+        }
 
         private async Task LoginIfNotGuest(GreetingsResponse greetings)
         {
@@ -193,6 +194,11 @@ namespace ProGaudi.Tarantool.Client
             catch (TimeoutException)
             {
                 PingsFailedByTimeoutCount++;
+                if (PingsFailedByTimeoutCount > 5)
+                {
+                    OnConnectionTimeoutThresholdReached(new ConnectionTimeoutThresholdReachedEventArgs
+                        { TimeoutCount = PingsFailedByTimeoutCount });
+                }
                 throw;
             }
         }
