@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-    <TargetFrameworks>net462;netstandard2.0;net60</TargetFrameworks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
+  <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net60</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
@@ -22,9 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="MsgPack.Light" />
-    <PackageReference Include="System.Memory" />
-    <PackageReference Include="System.Net.NameResolution" />
-    <PackageReference Include="System.Threading.Thread" />
+    <PackageReference Include="System.Memory" Condition=" $(TargetFramework) == 'netstandard2.0' " />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,10 +68,6 @@
       <DependentUpon>ValueTupleConverters.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
-    <DefineConstants>$(DefineConstants);PROGAUDI_NETCORE</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
