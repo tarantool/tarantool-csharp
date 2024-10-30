@@ -33,6 +33,14 @@ services:
             TARANTOOL_USER_NAME: admin
             TARANTOOL_USER_PASSWORD: adminPassword
 
+    tarantool_3_2_1:
+        image: tarantool/tarantool:3.2.1
+        ports:
+            - "3311:3301"
+        environment:
+            TARANTOOL_USER_NAME: admin
+            TARANTOOL_USER_PASSWORD: adminPassword
+
     redis:
         image: redis:3.0-alpine
         command: redis-server
